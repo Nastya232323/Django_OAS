@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Highway Grid CSS Template</title>
+
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="apple-touch-icon" href="{% static 'apple-touch-icon.png' %}" />
+
+        <link rel="stylesheet" href= "{% static "css/bootstrap.min.css" %}" />
+        <link rel="stylesheet" href= "{% static "css/bootstrap-theme.min.css" %}" />
+        <link rel="stylesheet" href= "{% static "css/fontAwesome.css" %}" />
+        <link rel="stylesheet" href="{% static "css/light-box.css" %}" />
+        <link rel="stylesheet" href="{% static "css/templatemo-style.css" %}" />
+
+        <link href="https://fonts.googleapis.com/css?family=Kanit:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+
+        <script src="{% static "js/vendor/modernizr-2.8.3-respond-1.4.2.min.js" %}"></script>
+    </head>
+
+<body>
+
+    <nav>
+        <div class="logo">
+            <a index.html>OA<em>S</em></a>
+        </div>
+    </nav>
+
+    <div id="video-container">
+        <div class="video-overlay"></div>
+        <div class="video-content">
+            <div class="inner">
+              <h1>Welcome to <em>Obious Acrotext Steganography</em></h1>
+                <div class="scroll-icon">
+                    <a class="scrollTo" data-scrollTo="portfolio" href="#"> <img src="{% static "img/scroll-icon.png" %}" alt=""></a>
+                </div>    
+            </div>
+        </div>
+        <img src = "{%  static "main.jpg" %}" />
+    </div>
+
+    <div class="grid-portfolio" id="portfolio">
+        <div class="container">
+            <div class="col-md-4 col-sm-6">
+                    <h1 style="color:#5B4346">  Введите текст </h1>
+                    <form id = "TextForm" method="POST">
+                        {% csrf_token %}
+                        {{ form_text }}
+                        <hr>
+                        <button type="submit" class="btn btn-outline-warning" style="background-color:#A16B21" id="btn">
+                            <h4 style="color:#5B4346">  Отправить </h4>
+                        </button>
+                    </form>
+            </div>
+            <div id="Display"> </div>
+            <script>
+                var frm = $('#TextForm');
+                frm.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    $.ajax({
+                        type:"POST",
+                        data: $('#Text'),
+                        success: function (msg) {
+                            //$('#Text').val('');
+                            //alert(msg)
+                            //console.log(json);
+                            //$("#Text").val(msg)
+                            $("#Display").html(msg)
+                        }
+                    })
+                })
+            </script>
+            <div class="col-md-4 col-sm-6">
+                    <h1 style="color:#5B4346"> Акротекст </h1>
+                    <textarea class="form-control" id="acrotext" rows="7" style="background-color:#BAB0B0" style="color:#A16B21">{{ acrotext.acrotext }}</textarea>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                    <h1 style="color:#5B4346"> Выберите последнее слово</h1>
+                    <select class="form-control" id="exampleSelect1" style="background-color:#BAB0B0" size="3">
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                    </select>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container-fluid">
+            <div class="col-md-12">
+                <p>BMSTU</p>
+            </div>
+        </div>
+    </footer>
+    
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+   <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>
