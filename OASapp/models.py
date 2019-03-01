@@ -13,3 +13,6 @@ class AcroText(models.Model):
 
     def get_top_words(self):
         return self.top_last_words
+
+    def get_acrotext(self):
+        return self.acrotext

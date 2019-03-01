@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Highway Grid CSS Template</title>
+        <title>OAS</title>
 
 
         <meta name="description" content="">
@@ -37,7 +37,7 @@
               <h1>Welcome to <em>Obious Acrotext Steganography</em></h1>
                 <div class="scroll-icon">
                     <a class="scrollTo" data-scrollTo="portfolio" href="#"> <img src="{% static "img/scroll-icon.png" %}" alt=""></a>
-                </div>    
+                </div>
             </div>
         </div>
         <img src = "{%  static "main.jpg" %}" />
@@ -56,37 +56,50 @@
                         </button>
                     </form>
             </div>
-            <div id="Display"> </div>
             <script>
-                var frm = $('#TextForm');
-                frm.addEventListener('click', (e) => {
+                const btn = document.getElementById('btn');
+                btn.onclick = (e) => {
                     e.preventDefault();
                     $.ajax({
-                        type:"POST",
+                        type: "POST",
+                        url: '/ajax/',
                         data: $('#Text'),
                         success: function (msg) {
-                            //$('#Text').val('');
-                            //alert(msg)
-                            //console.log(json);
-                            //$("#Text").val(msg)
-                            $("#Display").html(msg)
+                            $("#acrotext").text(JSON.parse(msg)['text'])
+                            for (i = 0; i < JSON.parse(msg)['words'].length; i++) {
+                                console.log(JSON.parse(msg)['words'][i])
+                                document.getElementById("select_word").options.clear;
+                                document.getElementById("select_word").options[i] = new Option(JSON.parse(msg)['words'][i], "")
+                            }
                         }
                     })
-                })
+                };
             </script>
             <div class="col-md-4 col-sm-6">
-                    <h1 style="color:#5B4346"> Акротекст </h1>
-                    <textarea class="form-control" id="acrotext" rows="7" style="background-color:#BAB0B0" style="color:#A16B21">{{ acrotext.acrotext }}</textarea>
+                    <h1 style="color:#5B4346"> Начало акротекста </h1>
+                    <textarea class="form-control" id="acrotext" rows="7" style="background-color:#BAB0B0" style="color:#A16B21" disabled></textarea>
             </div>
             <div class="col-md-4 col-sm-6">
                     <h1 style="color:#5B4346"> Выберите последнее слово</h1>
-                    <select class="form-control" id="exampleSelect1" style="background-color:#BAB0B0" size="3">
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
+                    <select class="form-control" id="select_word" style="background-color:#BAB0B0" size="3">
                     </select>
+                    <hr>
+                    <button type="submit" class="btn btn-outline-warning" style="background-color:#A16B21" id="btn2">
+                        <h4 style="color:#5B4346">  Отправить </h4>
+                    </button>
+            </div>
+             <script>
+                const btn2 = document.getElementById('btn2');
+                btn2.onclick = (e) => {
+                    e.preventDefault();
+                    var n = document.getElementById("select_word").options.selectedIndex;
+                    var text = document.getElementById("acrotext").value + " " +  document.getElementById("select_word").options[n].text;
+                    $("#acrotext_end").text(text)
+                };
+            </script>
+            <div class="col-md-6 col-sm-8">
+                <h1 style="color:#5B4346"> Акротекст </h1>
+                <textarea class="form-control" id="acrotext_end" rows="7" style="background-color:#BAB0B0" style="color:#A16B21" disabled></textarea>
             </div>
         </div>
     </div>
@@ -98,7 +111,7 @@
             </div>
         </div>
     </footer>
-    
+
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
    <script src="{% static 'js/main.js' %}"></script>
 
