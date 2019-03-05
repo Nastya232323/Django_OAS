@@ -214,89 +214,70 @@ def generation_top_last_words(top_last_words, new_word):
                 top_last_words.append(append_word)
     if len(top_last_words) > 100:
         top_last_words.pop()
+    print(top_last_words)
     return top_last_words
 
 
-def get_last_words(acrotext, platform, letter):
+def append_first_words(words, word, count_of_next_words):
+    if word == "." or word == "":
+        return words
+    position = 0
+    i = 0
+    while (count_of_next_words < words[i][1]) and (i < len(words)):
+        if i == len(words) - 1:
+            break
+        i += 1
+        position += 1
+    if position < 100:
+        append_word = [word, count_of_next_words]
+        extract_word = words[position]
+        for j in range(position, len(words)):
+            words[j] = append_word
+            append_word = extract_word
+            if j != len(words) - 1:
+                extract_word = words[j+1]
+            else:
+                words.append(append_word)
+    if len(words) > 100:
+        words.pop()
+    return words
+
+
+def generation_first_word(letter, platform):
+    words = list()
+    top_first_words = list()
+    for key in platform:
+        if key != "":
+            if key[0] == letter:
+                if len(words) == 0:
+                    words.append([key, len(platform[key])])
+                else:
+                    words = append_first_words(words, key, len(platform[key]))
+    for i in range(len(words)):
+        top_first_words.append(words[i][0])
+    return top_first_words
+
+
+def get_last_words(previous_word, platform, letter):
+    if previous_word == "":
+        return generation_first_word(letter, platform)
+    print(letter)
     top_last_words = list()
     top_last_message = list()
-    last_words = platform[acrotext[len(acrotext) - 2]]
+    last_words = platform[previous_word]
+    print(last_words)
     for i in range(len(last_words) - 1):
         if len(top_last_words) == 0:
-            top_last_words.append(last_words[i])
-            continue
+            if last_words[i][0][0] == letter:
+                top_last_words.append(last_words[i])
+                continue
         if last_words[i][0] == "":
             continue
         if last_words[i][0][0] == letter:
             top_last_words = generation_top_last_words(top_last_words, last_words[i])
-    for i in range(len(top_last_words) - 1):
+    for i in range(len(top_last_words)):
         top_last_message.append(top_last_words[i][0])
     print(top_last_message)
     return top_last_message
 
-
-def make_acrotext(platform, message, c=10, ret_list=False, correct_alphabet= "йцукенгшщзхфвапролджэячсмитбю"):
-    """
-    Make acrotext by platform.
-    platform must be build by build_platform function
-
-    If you don't know, what is acrotext, you must do:
-        1) learn Russian
-        2) read article by Ivan Chudasoff "ОТ АКРОСТИХА К АКРОКОНСТРУКЦИИ":http://rifma.com.ru/Chudasov-2.htm
-    Good luck! Don't worry, because it can be worse, if language will be Hungarian...
-    O... You can read wiki in english: https://en.wikipedia.org/wiki/Acrostic
-    But acrotext is a more general concept...
-
-    :param platform: platform, built by load_chain function.
-    :param message: message in u'...' format
-    :param c: параметр, показывающий со скольки слов можно ставить '.'
-    :return: возвращает текст, на перывх буквах которых стоит текст message
-    """
-    textlist = list()
-    keys = list()
-    keys_letter = dict()
-    for key in platform:
-        if len(key) < 2:
-            # INFO garbage in platform
-            continue
-        keys.append(key)
-        letter = key[0]
-        if keys_letter.get(letter):
-            keys_letter[letter].append(key)
-        else:
-            new_letter_list = list()
-            new_letter_list.append(key)
-            keys_letter[letter] = new_letter_list
-
-    textlist.append(u'.')
-    correct_count = 0
-    uncorrect_count = 0
-    for letter in message:
-        if letter not in correct_alphabet:
-            continue
-        try:
-            correct = __step(platform, keys, keys_letter, letter, textlist, c)
-        except:
-            print(u"ERROR in __step(platform, keys, keys_letter, letter, textlist, c)"\
-                .replace(u'letter', letter)\
-                .replace(u'c', str(c)))
-            print(str(sys.exc_info()))
-            correct = __step(platform, keys, keys_letter, letter, textlist, c)
-        if correct:
-            correct_count += 1
-        else:
-            uncorrect_count += 0
-        print(correct)
-
-        print(u">>" + textlist[-1])
-
-    rettext = ""
-    top_last_message = get_last_words(textlist, platform, message[len(message) - 1])
-    print(top_last_message)
-    textlist.pop()
-    for word in textlist:
-        rettext += word
-        if word != ".":
-            rettext += " "
-    return rettext, top_last_message
 

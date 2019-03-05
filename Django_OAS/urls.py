@@ -19,6 +19,7 @@ from OASapp import views
 
 urlpatterns = [
     path('', views.index),
-    path('ajax/', views.ajax),
+    path('ajax/', views.ajax_get),
     path('admin/', admin.site.urls),
+    path('ajax_words/', views.ajax_words),
 ]

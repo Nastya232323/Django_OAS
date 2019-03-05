@@ -15,7 +15,6 @@
     ~I am SOMBE(=Sorry Of My Bad English)
     create in: 2014-08-06
 """
-from typing import List, Any, Union
 
 __version__ = "07.09.2014"
 __author__ = 'PavelMSTU'
@@ -32,33 +31,18 @@ PLATFORM_PATH = os.path.join("DANTSOVA/platform_build", "dantsova.d0.plf")
 CORRECT_ALPHABET = "йцукенгшщзхъфывапролджэячсмитьбю"
 
 
-def test(message):
-    random.seed(message)
+def test(previous_word, letter):
     platform = MarkoffLib.load_chain(PLATFORM_PATH)
-
     if not platform:
         error = 'Not platform in "{0}"'.format(PLATFORM_PATH)
         raise EnvironmentError(error)
-
-    all_text_by_c = dict()
-    for c in [8, 10, 12, 20]:
-        text = MarkoffLib.make_acrotext(platform, message, c=c, correct_alphabet=CORRECT_ALPHABET)
-        #print("return text. c=@c@ message='@m@'::" \
-        #     .replace('@c@', str(c)) \
-        #      .replace('@m@', message))
-        #print("::::")
-        #text2 = text.replace(u'.', u'.\n')
-        #all_text_by_c[c] = text
-        #print(text2)
-        #print("::::")
-
-    #print(u'All text by c param:')
-    #for c in all_text_by_c.keys():
-    #    print(u"c={0}. m={1}. text={2}".format(c, message, all_text_by_c[c]))
-    return text
+    words = MarkoffLib.get_last_words(previous_word, platform, letter)
+    #for c in [8, 10, 12, 20]:
+    #   words = MarkoffLib.make_acrotext(platform, message, c=c, correct_alphabet=CORRECT_ALPHABET)
+    return words
 
 
 ##############
-def main(message):
-    acrotext = test(message)
-    return acrotext
+def main(previous_word, letter):
+    top_words = test(previous_word, letter)
+    return top_words

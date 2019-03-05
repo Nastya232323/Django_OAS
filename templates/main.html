@@ -65,10 +65,10 @@
                         url: '/ajax/',
                         data: $('#Text'),
                         success: function (msg) {
-                            $("#acrotext").text(JSON.parse(msg)['text'])
+                            console.log(JSON.parse(msg)['message'])
                             for (i = 0; i < JSON.parse(msg)['words'].length; i++) {
-                                console.log(JSON.parse(msg)['words'][i])
                                 document.getElementById("select_word").options.clear;
+                                document.getElementById("acrotext").clear;
                                 document.getElementById("select_word").options[i] = new Option(JSON.parse(msg)['words'][i], "")
                             }
                         }
@@ -76,12 +76,12 @@
                 };
             </script>
             <div class="col-md-4 col-sm-6">
-                    <h1 style="color:#5B4346"> Начало акротекста </h1>
+                    <h1 style="color:#5B4346"> Акротекст </h1>
                     <textarea class="form-control" id="acrotext" rows="7" style="background-color:#BAB0B0" style="color:#A16B21" disabled></textarea>
             </div>
             <div class="col-md-4 col-sm-6">
-                    <h1 style="color:#5B4346"> Выберите последнее слово</h1>
-                    <select class="form-control" id="select_word" style="background-color:#BAB0B0" size="3">
+                    <h1 style="color:#5B4346"> Выберите слово</h1>
+                    <select class="form-control" id="select_word" style="background-color:#BAB0B0" size="25">
                     </select>
                     <hr>
                     <button type="submit" class="btn btn-outline-warning" style="background-color:#A16B21" id="btn2">
@@ -93,14 +93,24 @@
                 btn2.onclick = (e) => {
                     e.preventDefault();
                     var n = document.getElementById("select_word").options.selectedIndex;
-                    var text = document.getElementById("acrotext").value + " " +  document.getElementById("select_word").options[n].text;
-                    $("#acrotext_end").text(text)
+                    var new_word = document.getElementById("select_word").options[n].text;
+                    var text = document.getElementById("acrotext").value + " " +  new_word;
+                    $.ajax({
+                        type: "POST",
+                        url: '/ajax_words/',
+                        data: {word:new_word},
+                        success: function (msg) {
+                            document.getElementById("select_word").options.length = 0;
+                            for (i = 0; i < JSON.parse(msg)['words'].length; i++) {
+                                console.log(JSON.parse(msg)['words'][i])
+                                document.getElementById("acrotext").clear;
+                                document.getElementById("select_word").options[i] = new Option(JSON.parse(msg)['words'][i], "")
+                            }
+                        }
+                    })
+                    $("#acrotext").text(text)
                 };
             </script>
-            <div class="col-md-6 col-sm-8">
-                <h1 style="color:#5B4346"> Акротекст </h1>
-                <textarea class="form-control" id="acrotext_end" rows="7" style="background-color:#BAB0B0" style="color:#A16B21" disabled></textarea>
-            </div>
         </div>
     </div>
 
