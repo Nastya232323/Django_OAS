@@ -17,9 +17,10 @@ from django.contrib import admin
 from django.urls import path
 from OASapp import views
 
-urlpatterns = [
+urlpatterns = {
     path('', views.index),
     path('ajax/', views.ajax_get),
     path('admin/', admin.site.urls),
     path('ajax_words/', views.ajax_words),
-]
+    path('ajax_del_word/', views.ajax_del_word),
+}
