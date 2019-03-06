@@ -66,6 +66,7 @@
                         data: $('#Text'),
                         success: function (msg) {
                             console.log(JSON.parse(msg)['message'])
+                            $("#acrotext").text("")
                             for (i = 0; i < JSON.parse(msg)['words'].length; i++) {
                                 document.getElementById("select_word").options.clear;
                                 document.getElementById("acrotext").clear;
@@ -94,21 +95,32 @@
                     e.preventDefault();
                     var n = document.getElementById("select_word").options.selectedIndex;
                     var new_word = document.getElementById("select_word").options[n].text;
-                    var text = document.getElementById("acrotext").value + " " +  new_word;
+                    var text = document.getElementById("acrotext").value;
                     $.ajax({
                         type: "POST",
                         url: '/ajax_words/',
                         data: {word:new_word},
                         success: function (msg) {
                             document.getElementById("select_word").options.length = 0;
+                            if (JSON.parse(msg)['message'] ==  "Ok") {
+                                text = text + " " +  new_word;
+                                console.log(text);
+                            }
+                            else if(JSON.parse(msg)['message'] == "Вы сгенерировали Ваш акротекст"){
+                                text = text + " " +  new_word;
+                                $("#acrotext").text(text);
+                                alert(JSON.parse(msg)['message']);
+                            }
+                            else {
+                                alert(JSON.parse(msg)['message']);
+                            }
                             for (i = 0; i < JSON.parse(msg)['words'].length; i++) {
-                                console.log(JSON.parse(msg)['words'][i])
                                 document.getElementById("acrotext").clear;
                                 document.getElementById("select_word").options[i] = new Option(JSON.parse(msg)['words'][i], "")
                             }
+                            $("#acrotext").text(text)
                         }
                     })
-                    $("#acrotext").text(text)
                 };
             </script>
         </div>

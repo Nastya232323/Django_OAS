@@ -267,12 +267,12 @@ def get_last_words(previous_word, platform, letter):
     last_words = platform[previous_word]
     print(last_words)
     for i in range(len(last_words) - 1):
+        if last_words[i][0] == "":
+            continue
         if len(top_last_words) == 0:
             if last_words[i][0][0] == letter:
                 top_last_words.append(last_words[i])
                 continue
-        if last_words[i][0] == "":
-            continue
         if last_words[i][0][0] == letter:
             top_last_words = generation_top_last_words(top_last_words, last_words[i])
     for i in range(len(top_last_words)):
