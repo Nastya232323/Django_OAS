@@ -25,6 +25,17 @@ def ajax_get(request):
 def ajax_words(request):
     new_word = request.POST.get('word')
     message = acrotext.do_word(new_word)
+    print(message)
+    response_data = json.dumps({"words": acrotext.get_top_words(),
+                                "message": message})
+    return HttpResponse(response_data)
+
+
+@csrf_exempt
+def ajax_del_word(request):
+    new_word = request.POST.get('word')
+    print(new_word)
+    message = acrotext.return_word(new_word)
     response_data = json.dumps({"words": acrotext.get_top_words(),
                                 "message": message})
     return HttpResponse(response_data)
