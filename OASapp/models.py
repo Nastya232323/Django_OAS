@@ -12,7 +12,7 @@ class AcroText(models.Model):
         self.text = text
         self.count = 0
 
-    def do_word(self, previous_word):
+    def do_word(self, previous_word, count_of_words):
         if self.count == len(self.text):
             message = "Вы сгенерировали Ваш акротекст"
             self.top_last_words = []
@@ -23,8 +23,7 @@ class AcroText(models.Model):
             message = "Вы сгенерировали Ваш акротекст"
             self.top_last_words = []
             return message
-        words = Stego.main(previous_word, self.text[self.count])
-        print(words)
+        words = Stego.main(previous_word, self.text[self.count], count_of_words)
         if len(words) == 0:
             print("alarm")
             message = "Выберите другое слово"
@@ -33,6 +32,9 @@ class AcroText(models.Model):
         self.top_last_words = words
         print(self.count)
         return "Ok"
+
+    def top_five_words(self, word):
+        return Stego.main(word, self.text[self.count], 5)
 
     def return_word(self, previous_word):
         self.count -= 2

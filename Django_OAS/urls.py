@@ -23,4 +23,5 @@ urlpatterns = {
     path('admin/', admin.site.urls),
     path('ajax_words/', views.ajax_words),
     path('ajax_del_word/', views.ajax_del_word),
+    path('get_top_five_words/', views.get_top_five_words),
 }

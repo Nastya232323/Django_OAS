@@ -192,7 +192,7 @@ def __step(platform, keys, keys_letter,  letter, textlist, c, error_words=None, 
             return True
 
 
-def generation_top_last_words(top_last_words, new_word):
+def generation_top_last_words(top_last_words, new_word, count_of_words):
     if new_word[0] == '.' or new_word[0] == "":
         return top_last_words
     position = 0
@@ -212,7 +212,7 @@ def generation_top_last_words(top_last_words, new_word):
                 extract_word = top_last_words[j+1]
             else:
                 top_last_words.append(append_word)
-    if len(top_last_words) > 100:
+    if len(top_last_words) > count_of_words:
         top_last_words.pop()
     print(top_last_words)
     return top_last_words
@@ -258,14 +258,12 @@ def generation_first_word(letter, platform):
     return top_first_words
 
 
-def get_last_words(previous_word, platform, letter):
+def get_last_words(previous_word, platform, letter, count_of_words):
     if previous_word == "":
         return generation_first_word(letter, platform)
-    print(letter)
     top_last_words = list()
     top_last_message = list()
     last_words = platform[previous_word]
-    print(last_words)
     for i in range(len(last_words) - 1):
         if last_words[i][0] == "":
             continue
@@ -274,7 +272,7 @@ def get_last_words(previous_word, platform, letter):
                 top_last_words.append(last_words[i])
                 continue
         if last_words[i][0][0] == letter:
-            top_last_words = generation_top_last_words(top_last_words, last_words[i])
+            top_last_words = generation_top_last_words(top_last_words, last_words[i], count_of_words)
     for i in range(len(top_last_words)):
         top_last_message.append(top_last_words[i][0])
     print(top_last_message)

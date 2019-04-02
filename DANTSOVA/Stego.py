@@ -21,7 +21,6 @@ __author__ = 'PavelMSTU'
 __copyright__ = 'LGPL'
 
 import os
-import random
 from DANTSOVA import MarkoffLib
 
 # Path to built platform
@@ -31,18 +30,15 @@ PLATFORM_PATH = os.path.join("DANTSOVA/platform_build", "dantsova.d0.plf")
 CORRECT_ALPHABET = "йцукенгшщзхъфывапролджэячсмитьбю"
 
 
-def test(previous_word, letter):
+def test(previous_word, letter, count_of_words):
     platform = MarkoffLib.load_chain(PLATFORM_PATH)
     if not platform:
         error = 'Not platform in "{0}"'.format(PLATFORM_PATH)
         raise EnvironmentError(error)
-    words = MarkoffLib.get_last_words(previous_word, platform, letter)
-    #for c in [8, 10, 12, 20]:
-    #   words = MarkoffLib.make_acrotext(platform, message, c=c, correct_alphabet=CORRECT_ALPHABET)
+    words = MarkoffLib.get_last_words(previous_word, platform, letter, count_of_words)
     return words
 
 
-##############
-def main(previous_word, letter):
-    top_words = test(previous_word, letter)
+def main(previous_word, letter, count_of_words):
+    top_words = test(previous_word, letter, count_of_words)
     return top_words
